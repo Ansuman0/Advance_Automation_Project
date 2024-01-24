@@ -126,8 +126,11 @@
 					<suiteXmlFiles>
 						<suiteXmlFile>testng.xml</suiteXmlFile>
 					</suiteXmlFiles>
+					<argLine>-Djava.awt.headless=true</argLine>
 				</configuration>
 			</plugin>
+			
+			
 
 
 		</plugins>
