@@ -5,13 +5,12 @@ on:
     branches:
       - main
 
-
 jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
     steps:
-       - name: Set up xvfb
+      - name: Set up xvfb
         run: sudo apt-get install xvfb
       - name: Start xvfb
         run: xvfb-run -a --server-args="-screen 0 1024x768x24" echo "Xvfb started successfully"
