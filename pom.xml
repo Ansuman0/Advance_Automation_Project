@@ -126,8 +126,7 @@
 						<suiteXmlFile>testng.xml</suiteXmlFile>
 					</suiteXmlFiles>
 					<argLine>-Djava.awt.headless=true</argLine>
-					<exclude>**/*GuiTest.java</exclude>
-
+					
 				</configuration>
 			</plugin>
 			<!-- Maven Resources Plugin -->
