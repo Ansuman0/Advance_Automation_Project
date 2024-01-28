@@ -45,4 +45,4 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Push Docker image
-        run: docker push ansumansing/automation-project:${{ steps.metadata.outputs.tags }}:latest
+        run: docker push ansumansing/automation-project:${{ steps.metadata.outputs.tags }}:${{latest}}
