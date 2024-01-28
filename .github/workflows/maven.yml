@@ -33,6 +33,6 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          dockerfile: ./Docker/dockerfile
+          dockerfile: ./dockerfile
           push: true
           tags: ansumansing/automation-project:latest
