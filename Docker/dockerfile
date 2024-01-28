@@ -9,5 +9,5 @@ RUN mvn package
 FROM openjdk:17
 EXPOSE 8080
 WORKDIR /automation-framework
-COPY --from=maven target/Selenium-Automation-Framwork-0.0.1-SNAPSHOT.jar /app/Selenium-Automation-Framwork-0.0.1-SNAPSHOT.jar
-ENTRYPOINT ["java", "-jar", "/app/Selenium-Automation-Framwork-0.0.1-SNAPSHOT.jar"]
+COPY --from=maven target/Selenium-Automation-Framwork.jar /app/Selenium-Automation-Framwork.jar
+ENTRYPOINT ["java", "-jar", "/app/Selenium-Automation-Framwork.jar"]
