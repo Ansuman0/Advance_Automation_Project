@@ -46,11 +46,6 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build Docker image and create tarball
-        run: |
-          docker buildx create --use
-          docker buildx build --output type=local,dest=.tar.gz -t ${{ env.IMG_NAME }}:latest .
-
+          
       - name: Push Docker image
         run: docker load -i .tar.gz && docker push ${{ env.IMG_NAME }}:${{ steps.metadata.outputs.tags }}
