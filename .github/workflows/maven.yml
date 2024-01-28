@@ -20,13 +20,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Docker metadata
-        id: metadata
-        uses: docker/metadata-action@v3
-        with:
-          images: ansumansing/automation-project
-          tags: ${{ steps.generate_random_string.outputs.random_string }}
-
       - name: Generate Random String
         id: generate_random_string
         run: echo "::set-output name=random_string::$(head /dev/urandom | LC_CTYPE=C tr -dc 'a-zA-Z' | head -c 5)"
@@ -50,8 +43,5 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Push Docker image
-        run: docker push ansumansing/automation-project:${{ steps.random_tag.outputs.random_tag }}
-
-
-
- 
+        id: push_docker_image
+        run: docker push ansumansing/automation-project:${{ steps.generate_random_string.outputs.random_string }}
