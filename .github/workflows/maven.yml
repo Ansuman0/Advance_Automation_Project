@@ -20,9 +20,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Generate Random String
-        id: generate_random_string
-        run: echo "::set-output name=random_string::$(head /dev/urandom | LC_CTYPE=C tr -dc 'a-zA-Z' | head -c 5)"
+      - name: Generate Random Number
+        id: generate_random_number
+        run: echo "::set-output name=random_number::$(head /dev/urandom | LC_CTYPE=C tr -dc '0-9' | head -c 5)"
 
       - name: Set up JDK and Maven
         uses: actions/setup-java@v2
@@ -44,4 +44,4 @@ jobs:
 
       - name: Push Docker image
         id: push_docker_image
-        run: docker push ansumansing/automation-project:${{ steps.generate_random_string.outputs.random_string }}
+        run: docker push ansumansing/automation-project:${{ steps.generate_random_number.outputs.random_number }}
