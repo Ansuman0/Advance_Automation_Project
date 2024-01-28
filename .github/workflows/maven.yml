@@ -46,6 +46,6 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-          
+
       - name: Push Docker image
-        run: docker load -i .tar.gz && docker push ${{ env.IMG_NAME }}:${{ steps.metadata.outputs.tags }}
+        run: docker push ${{ env.IMG_NAME }}:${{ steps.metadata.outputs.tags }}
