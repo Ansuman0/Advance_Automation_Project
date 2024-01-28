@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - docker_tags
-   
     tags:
       - 'v[0-9]+.[0-9]+.[0-9]+'
 
@@ -12,8 +11,6 @@ jobs:
   build_and_publish:
     name: Build & push Docker image
     runs-on: ubuntu-latest
-    env:
-      IMG_NAME: ansumansing/automation-project
 
     steps:
       - name: Checkout
@@ -23,7 +20,7 @@ jobs:
         id: metadata
         uses: docker/metadata-action@v3
         with:
-          images: ${{ env.IMG_NAME }}
+          images: ansumansing/automation-project
           tags: |
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
@@ -48,4 +45,4 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Push Docker image
-        run: docker push ${{ env.IMG_NAME }}:${{ steps.metadata.outputs.tags }}
+        run: docker push ansumansing/automation-project:${{ steps.metadata.outputs.tags }}
