@@ -12,6 +12,10 @@ jobs:
     name: Build & push Docker image
     runs-on: ubuntu-latest
 
+    outputs:
+      id: random_tag
+      value: ${{ steps.generate_random_string.outputs.random_string }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -21,10 +25,11 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           images: ansumansing/automation-project
-          tags: |
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=raw,value={{sha}},enable=${{ github.ref_type != 'tag' }}
+          tags: ${{ steps.generate_random_string.outputs.random_string }}
+
+      - name: Generate Random String
+        id: generate_random_string
+        run: echo "::set-output name=random_string::$(cat /dev/urandom | LC_CTYPE=C tr -dc 'a-zA-Z' | fold -w 5 | head -n 1)"
 
       - name: Set up JDK and Maven
         uses: actions/setup-java@v2
@@ -45,4 +50,4 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Push Docker image
-        run: docker push ansumansing/automation-project:${{ steps.metadata.outputs.tags }}
+        run: docker push ansumansing/automation-project:${{ steps.random_tag.outputs.random_tag }}
