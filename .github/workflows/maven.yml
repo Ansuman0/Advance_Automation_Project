@@ -12,10 +12,6 @@ jobs:
     name: Build & push Docker image
     runs-on: ubuntu-latest
 
-    outputs:
-      id: random_tag
-      value: ${{ steps.generate_random_number.outputs.random_number }}
-
     env:
       IMAGE_NAME: docker-project
       IMAGE_VERSION: latest
@@ -24,9 +20,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Generate Random Number
-        id: generate_random_number
-        run: echo "::set-output name=random_number::$(shuf -i 0-99999 -n 1)"
+      - name: Generate Random Tag
+        id: generate_random_tag
+        run: echo "::set-output name=random_tag::$(shuf -i 0-99999 -n 1)"
 
       - name: Set up JDK and Maven
         uses: actions/setup-java@v2
@@ -49,8 +45,8 @@ jobs:
       - name: Build Docker image
         id: build_image
         run: |
-          docker build -t ansumansing/$IMAGE_NAME:$IMAGE_VERSION .
-          echo "::set-output name=image_id::$(docker inspect -f '{{.Id}}' ansumansing/$IMAGE_NAME:$IMAGE_VERSION | cut -c1-5)"
+          docker build -t ansumansing/$IMAGE_NAME:$IMAGE_VERSION-$(( RANDOM % 10000 )) .
+          echo "::set-output name=image_id::$(docker inspect -f '{{.Id}}' ansumansing/$IMAGE_NAME:$IMAGE_VERSION-$(( RANDOM % 10000 )) )"
 
       - name: Push Docker image
-        run: docker push ansumansing/$IMAGE_NAME:$IMAGE_VERSION
+        run: docker push ansumansing/$IMAGE_NAME:$IMAGE_VERSION-$(( RANDOM % 10000 ))
