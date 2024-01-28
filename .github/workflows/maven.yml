@@ -15,7 +15,11 @@ jobs:
     outputs:
       id: random_tag
       value: ${{ steps.generate_random_number.outputs.random_number }}
-
+	  
+    env:
+      IMAGE_NAME: docker-project
+      IMAGE_VERSION: latest
+	  
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -49,4 +53,4 @@ jobs:
           echo "::set-output name=image_id::$(docker inspect -f '{{.Id}}' ansumansing/automation-project | cut -c1-5)"
 
       - name: Push Docker image
-        run: docker push ansumansing/automation-project:${{ steps.build_image.outputs.image_id }}
+        run: docker push ansumansing/$IMAGE_NAME:$IMAGE_VERSION
