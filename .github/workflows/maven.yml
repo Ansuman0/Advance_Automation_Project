@@ -10,9 +10,9 @@ jobs:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
 
-    env:
-      TZ: 'Asia/Kolkata'
-      TIMESTAMP: ${{ runner.outputs.timestamp }}
+    outputs:
+      id: set_timestamp
+      value: ${{ steps.set_timestamp.outputs.timestamp }}
 
     steps:
       - name: Check out the repo
@@ -47,7 +47,7 @@ jobs:
           tags: |
             ansumansing/docker-project:latest
             ansumansing/docker-project:${{ github.actor }}-${{ github.sha }}
-            ansumansing/docker-project:${{ github.actor }}-${{ env.TIMESTAMP }}
+            ansumansing/docker-project:${{ github.actor }}-${{ needs.push_to_registry.outputs.timestamp }}
 
       - name: Extract Docker image digest
         run: echo "Docker image digest - ${{ steps.docker_build.outputs.digest }}"
