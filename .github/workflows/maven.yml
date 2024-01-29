@@ -45,7 +45,6 @@ jobs:
           dockerfile: ./dockerfile  # Adjust the path to your Dockerfile if necessary
           push: true
           tags: |
-            ansumansing/docker-project:latest
             ansumansing/docker-project:${{ github.actor }}-${{ github.sha }}
             ansumansing/docker-project:${{ github.actor }}-${{ env.TIMESTAMP }}
 
