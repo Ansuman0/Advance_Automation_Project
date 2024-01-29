@@ -1,16 +1,13 @@
-version: '3'
-services:
-  chromgrid:
-    image: selenium/standalone-chrome:latest
-    container_name: chromgrid
-    ports:
-      - "4445:4444"
-      shm_size: "2g"
+# Build stage
+FROM maven:3.8.4-openjdk-17-slim as maven
+COPY ./pom.xml ./pom.xml
+COPY ./src ./src
+RUN mvn dependency:go-offline -B
+RUN mvn package
 
-  edgegrid:
-    image: selenium/standalone-edge:latest
-    container_name: edgegrid
-    ports:
-      - "4447:4444"
-      - "7903:7900"
-    shm_size: "2g"
+# Final stage
+FROM openjdk:17
+EXPOSE 8080
+WORKDIR /automation-framework
+COPY --from=maven target/Selenium-Automation-Framwork.jar /app/Selenium-Automation-Framwork.jar
+ENTRYPOINT ["java", "-jar", "/app/Selenium-Automation-Framwork.jar"]
