@@ -1,13 +1,13 @@
-name: Build and Push Docker image to Docker Hub
+name: Build, Test, and Push Docker image to Docker Hub
 
 on:
   push:
     branches:
-      - devlopbranch
+      - develop
 
 jobs:
-  push_to_registry:
-    name: Push Docker image to Docker Hub
+  build_test_and_push:
+    name: Build, Test, and Push Docker image
     runs-on: ubuntu-latest
 
     steps:
@@ -22,6 +22,9 @@ jobs:
 
       - name: Build with Maven
         run: mvn -B clean install
+
+      - name: CodeQL Scan
+        uses: github/codeql-action/analyze@v2
 
       - name: Login to Docker Hub
         uses: docker/login-action@v2
