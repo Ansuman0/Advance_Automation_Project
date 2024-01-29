@@ -12,11 +12,15 @@ jobs:
 
     env:
       TZ: 'Asia/Kolkata'
-      TIMESTAMP: ${{ steps.set_timestamp.outputs.timestamp }}
+      TIMESTAMP: ${{ runner.outputs.timestamp }}
 
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
+
+      - name: Set timestamp
+        id: set_timestamp
+        run: echo "timestamp=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
 
       - name: Set up JDK and Maven
         uses: actions/setup-java@v2
@@ -26,10 +30,6 @@ jobs:
 
       - name: Build with Maven
         run: mvn -B clean install
-
-      - name: Set timestamp
-        id: set_timestamp
-        run: echo "timestamp=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
 
       - name: Login to Docker Hub
         uses: docker/login-action@v2
@@ -45,6 +45,7 @@ jobs:
           dockerfile: ./dockerfile  # Adjust the path to your Dockerfile if necessary
           push: true
           tags: |
+            ansumansing/docker-project:latest
             ansumansing/docker-project:${{ github.actor }}-${{ github.sha }}
             ansumansing/docker-project:${{ github.actor }}-${{ env.TIMESTAMP }}
 
