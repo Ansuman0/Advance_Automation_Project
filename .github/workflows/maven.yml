@@ -46,9 +46,9 @@ jobs:
         id: build_image
         run: |
           DOCKER_TAG="latestv${{ steps.generate_random_number.outputs.random_number }}"
-          docker build -t ansumansing/automation-project:${DOCKER_TAG} .
-          echo "::set-output name=image_tag::${DOCKER_TAG}"
+          docker build -t ansumansing/automation-project:${-DOCKER_TAG} .
+          echo "::set-output name=image_tag::${-DOCKER_TAG}"
 
       - name: Push Docker image
         run: |
-          docker push ansumansing/automation-project:${{ steps.build_image.outputs.image_tag }}
+          docker push  ansumansing/automation-project:${{ steps.build_image.outputs.image_tag }}
