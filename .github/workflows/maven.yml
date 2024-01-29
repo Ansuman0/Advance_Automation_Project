@@ -49,4 +49,4 @@ jobs:
           echo "::set-output name=image_id::$(docker inspect -f '{{.Id}}' ansumansing/$IMAGE_NAME:$IMAGE_VERSION-$(( RANDOM % 10000 )) )"
 
       - name: Push Docker image
-        run: docker push -t ansumansing/))$(( RANDOM % 10000))-$IMAGE_NAME:$IMAGE_VERSION .
+        run: docker push -t  testimage ansumansing/))$(( RANDOM % 10000))-$IMAGE_NAME:$IMAGE_VERSION .
