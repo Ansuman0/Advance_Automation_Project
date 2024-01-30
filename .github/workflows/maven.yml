@@ -24,12 +24,17 @@ jobs:
         with:
           token: ${{ secrets.TOKEN_GITHUB }}
           languages: java
+
       - name: Build Docker image
         id: build_image
         run: |
-          DOCKER_TAG="latestv${{ needs.codeql_analysis.outputs.random_number }}"
+          DOCKER_TAG="latest-V${{ steps.generate_random_number.outputs.random_number }}"
           docker build -t ansumansing/automation-project:${DOCKER_TAG} .
           echo "::set-output name=image_tag::${DOCKER_TAG}"
+
       - name: Push Docker image
-        run: >
+        run: |
+          docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
           docker push ansumansing/automation-project:${{ steps.build_image.outputs.image_tag }}
+
+  # Add any other jobs or steps as needed
