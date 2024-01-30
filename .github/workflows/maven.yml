@@ -3,13 +3,13 @@ name: Build, Analyze, and Push Docker image
 on:
   push:
     branches:
-      - Kubernetes_Docker
+      - '*'
     tags:
       - 'v[0-9]+.[0-9]+.[0-9]+'
 
 jobs:
-  codeql_analysis:
-    name: CodeQL Analysis
+  build_and_push_docker_image:
+    name: Build and Push Docker image
     runs-on: ubuntu-latest
 
     steps:
@@ -31,23 +31,11 @@ jobs:
 
       # Additional CodeQL configuration steps if needed
 
-  build_and_push_docker_image:
-    name: Build and Push Docker image
-    runs-on: ubuntu-latest
+      - name: Maven Prepare Analysis
+        run: mvn clean compile
 
-    outputs:
-      id: random_tag
-      value: ${{ needs.codeql_analysis.outputs.random_number }}
-
-    needs: codeql_analysis
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Generate Random Number
-        id: generate_random_number
-        run: echo "::set-output name=random_number::$(shuf -i 0-9 -n 1)"
+      - name: Run Code Analysis
+        run: mvn codeql:analyze
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
