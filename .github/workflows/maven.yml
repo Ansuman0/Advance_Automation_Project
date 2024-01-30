@@ -52,3 +52,4 @@ jobs:
       - name: Push Docker image
         run: |
           docker push  ansumansing/automation-project:${{ steps.build_image.outputs.image_tag }}
+
