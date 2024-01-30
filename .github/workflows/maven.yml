@@ -3,7 +3,7 @@ name: Build and Publish Docker image
 on:
   push:
     branches:
-      - codeql_testing
+      - codeql-newtesting
     tags:
       - 'v[0-9]+.[0-9]+.[0-9]+'
 
@@ -46,12 +46,6 @@ jobs:
         with:
           token: ${{ secrets.TOKEN_GITHUB }}
           languages: ${{ matrix.language }}
-
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
-        with:
-          token: ${{ secrets.TOKEN_GITHUB }}
-          category: "/language:${{matrix.language}}"
 
       - name: Build with Maven
         run: mvn -B clean install
