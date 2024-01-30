@@ -43,6 +43,7 @@ jobs:
         uses: github/codeql-action/analyze@v3
         with:
           # Additional configuration parameters if needed
+          token: ${{ secrets.TOKEN_GITHUB }}
           category: "security-and-quality"
 
       - name: Set up Docker Buildx
