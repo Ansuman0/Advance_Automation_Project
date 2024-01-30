@@ -26,7 +26,7 @@ jobs:
         uses: github/codeql-action/init@v3
         with:
           # Use a GitHub token with appropriate permissions
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.TOKEN_GITHUB }}
           languages: 'java'
 
       # Additional CodeQL configuration steps if needed
