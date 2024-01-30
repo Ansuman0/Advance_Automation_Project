@@ -16,6 +16,11 @@ jobs:
       id: random_tag
       value: ${{ steps.generate_random_number.outputs.random_number }}
 
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'java-kotlin' ]
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -30,22 +35,21 @@ jobs:
           distribution: 'adopt'
           java-version: '17'
 
-      - name: Build with Maven
-        run: mvn -B clean install
-        
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
-          token: ${{ secrets.TOKEN_GITHUB }}
-          languages: java
+          languages: ${{ matrix.language }}
 
-      - name: Run CodeQL Analysis
-        id: codeql
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
+
+      - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
         with:
-          token: ${{ secrets.TOKEN_GITHUB }}
-          languages: java
-          category: "security-and-quality"
+          category: "/language:${{matrix.language}}"
+
+      - name: Build with Maven
+        run: mvn -B clean install
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
