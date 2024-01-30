@@ -3,7 +3,7 @@ name: Build and Publish Docker image
 on:
   push:
     branches:
-      - main
+      - codeql_testing
     tags:
       - 'v[0-9]+.[0-9]+.[0-9]+'
 
@@ -32,13 +32,7 @@ jobs:
 
       - name: Build with Maven
         run: mvn -B clean install
-
-      - name: Save CodeQL results
-        run: |
-          mkdir codeql_results
-          mv ${{ steps.codeql.outputs.sarif_file }} codeql_results/
-          tar -czvf codeql_results.tar.gz codeql_results/
-
+        
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
