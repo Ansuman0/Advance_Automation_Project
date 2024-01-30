@@ -55,9 +55,6 @@ jobs:
       - name: Maven Project Clean 
         run: mvn clean compile
 
-      - name: Maven Project Install and Build  
-        run: mvn clean compile
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
