@@ -8,21 +8,13 @@ on:
       - 'v[0-9]+.[0-9]+.[0-9]+'
 
 jobs:
-  build_analyze_and_publish:
-    name: Build, Analyze & Push Docker image
+  codeql_analysis:
+    name: CodeQL Analysis
     runs-on: ubuntu-latest
-
-    outputs:
-      id: random_tag
-      value: ${{ steps.generate_random_number.outputs.random_number }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
-      - name: Generate Random Number
-        id: generate_random_number
-        run: echo "::set-output name=random_number::$(shuf -i 0-9 -n 1)"
 
       - name: Set up JDK and Maven
         uses: actions/setup-java@v2
@@ -30,7 +22,6 @@ jobs:
           distribution: 'adopt'
           java-version: '17'
 
-      # CodeQL Analysis
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v2
         with:
@@ -44,6 +35,24 @@ jobs:
         with:
           sarif_file: codeql-results.sarif
 
+  build_and_push_docker_image:
+    name: Build and Push Docker image
+    runs-on: ubuntu-latest
+
+    outputs:
+      id: random_tag
+      value: ${{ needs.codeql_analysis.outputs.random_number }}
+
+    needs: codeql_analysis
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Generate Random Number
+        id: generate_random_number
+        run: echo "::set-output name=random_number::$(shuf -i 0-9 -n 1)"
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
@@ -56,7 +65,7 @@ jobs:
       - name: Build Docker image
         id: build_image
         run: |
-          DOCKER_TAG="latestv${{ steps.generate_random_number.outputs.random_number }}"
+          DOCKER_TAG="latest -V${{ needs.codeql_analysis.outputs.random_number }}"
           docker build -t ansumansing/automation-project:${DOCKER_TAG} .
           echo "::set-output name=image_tag::${DOCKER_TAG}"
 
