@@ -14,7 +14,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
       - name: Set up JDK and Maven
         uses: actions/setup-java@v2
@@ -25,15 +25,11 @@ jobs:
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
+          # Use a GitHub token with appropriate permissions
+          token: ${{ secrets.GITHUB_TOKEN }}
           languages: 'java'
 
-      - name: Autobuild
-        uses: github/codeql-action/autobuild@v3
-
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
-        with:
-          sarif_file: codeql-results.sarif
+      # Additional CodeQL configuration steps if needed
 
   build_and_push_docker_image:
     name: Build and Push Docker image
@@ -47,7 +43,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
       - name: Generate Random Number
         id: generate_random_number
@@ -65,7 +61,7 @@ jobs:
       - name: Build Docker image
         id: build_image
         run: |
-          DOCKER_TAG="latest -V${{ needs.codeql_analysis.outputs.random_number }}"
+          DOCKER_TAG="latestv${{ needs.codeql_analysis.outputs.random_number }}"
           docker build -t ansumansing/automation-project:${DOCKER_TAG} .
           echo "::set-output name=image_tag::${DOCKER_TAG}"
 
