@@ -1,70 +1,33 @@
-name: Build, Analyze, and Push Docker image
+name: Publish Docker image
 
 on:
   push:
-    branches:
-      - Kubernetes_Docker
-    tags:
-      - 'v[0-9]+.[0-9]+.[0-9]+'
+    branches: ['newDockerBuild']
 
 jobs:
-  codeql_analysis:
-    name: CodeQL Analysis
+  push_to_registry:
+    name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Set up JDK and Maven
-        uses: actions/setup-java@v2
-        with:
-          distribution: 'adopt'
-          java-version: '17'
-
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
-        with:
-          # Use a GitHub token with appropriate permissions
-          token: ${{ secrets.TOKEN_GITHUB }}
-          languages: 'java'
-
-      # Additional CodeQL configuration steps if needed
-
-  build_and_push_docker_image:
-    name: Build and Push Docker image
-    runs-on: ubuntu-latest
-
-    outputs:
-      id: random_tag
-      value: ${{ needs.codeql_analysis.outputs.random_number }}
-
-    needs: codeql_analysis
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Generate Random Number
-        id: generate_random_number
-        run: echo "::set-output name=random_number::$(shuf -i 0-9 -n 1)"
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-
+      - name: Check out the repo
+        uses: actions/checkout@v3
+      
       - name: Log in to Docker Hub
-        uses: docker/login-action@v2
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build Docker image
-        id: build_image
-        run: |
-          DOCKER_TAG="latestv${{ needs.codeql_analysis.outputs.random_number }}"
-          docker build -t ansumansing/automation-project:${DOCKER_TAG} .
-          echo "::set-output name=image_tag::${DOCKER_TAG}"
-
-      - name: Push Docker image
-        run: |
-          docker push ansumansing/automation-project:${{ steps.build_image.outputs.image_tag }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+        with:
+          images: thetips4you/testjodejsapp
+      
+      - name: Build and push Docker image
+        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
