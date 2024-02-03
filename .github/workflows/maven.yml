@@ -31,5 +31,6 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: DockerFileFolder/
+          dockerfile: DockerFileFolder/Dockerfile
           push: true
           tags: ansumansing/automation-project:${{ github.sha }}
