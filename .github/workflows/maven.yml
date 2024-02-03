@@ -34,7 +34,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          dockerfile: ./dockerfile  # Adjust the path to your Dockerfile if necessary
+          dockerfile: DockerFileFolder/dockerfile  # Adjust the path to your Dockerfile if necessary
           push: true
           tags: |
             ansumansing/automation-project:${{ github.sha }}
