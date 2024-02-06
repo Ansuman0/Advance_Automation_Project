@@ -6,8 +6,8 @@ Project Details
 and partners. It provides a comprehensive suite of tools for sales, marketing, and customer support teams to streamline their processes and improve efficiency.
 
 **Tools and Technology**: 
-Selenium and Java (Scripting).
-TestNg.
-Maven.
+Selenium and Java (Scripting),
+TestNg,
+Maven,
 Extent Reports.
 
