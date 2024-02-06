@@ -7,7 +7,10 @@ and partners. It provides a comprehensive suite of tools for sales, marketing, a
 
 **Tools and Technology**: 
 Selenium and Java (Scripting),
-TestNg,
-Maven,
-Extent Reports.
+TestNg (Unit Testing Framework),
+Maven (Build Tool),
+Extent Reports (Report Tool).
+
+**Framework Outline**:
+
 
